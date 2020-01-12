@@ -1,3 +1,4 @@
+package game;
 
 public class Game implements Runnable {
 
@@ -10,6 +11,6 @@ public class Game implements Runnable {
     }
 
     public synchronized void stop() {
-        
+
     }
 }
