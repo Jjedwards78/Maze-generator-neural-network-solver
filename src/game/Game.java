@@ -1,10 +1,12 @@
 package game;
 
 import javax.swing.JFrame;
+import java.awt.Canvas;
 
 public class Game implements Runnable {
 
     private JFrame frame;
+    private Canvas canvas;
     
     public void run() {
         
@@ -16,7 +18,8 @@ public class Game implements Runnable {
         frame.setLocationRelativeTo(null);
         frame.setSize(800, 450);
         frame.setVisible(true);
-
+        canvas = new Canvas();
+        
     }
 
     public synchronized void stop() {
