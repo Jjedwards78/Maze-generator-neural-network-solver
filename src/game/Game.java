@@ -7,12 +7,17 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+import game.Input.KeyInput;
+import game.Input.MouseInput;
+
+
 public class Game implements Runnable {
 
     private Thread thread;
     private JFrame frame;
     private Canvas canvas;
 
+     
     private int width, height;
     public String title;
 
@@ -20,6 +25,9 @@ public class Game implements Runnable {
     private Graphics g;
 
     private boolean running = false;
+
+    public MouseInput mouseIn;
+    public KeyInput keyIn;
 
     public Game(String title, int width, int height) {
         this.title = title;
@@ -39,6 +47,8 @@ public class Game implements Runnable {
         canvas.setMinimumSize(new Dimension(width, height));
         canvas.setFocusable(false);
 
+        canvas.addMouseListener(mouseIn);
+        canvas.addKeyListener(keyIn);
         frame.add(canvas);
         frame.pack();
     }
