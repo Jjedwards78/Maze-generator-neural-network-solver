@@ -1,23 +1,19 @@
 package game;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
-import javax.swing.JFrame;
-
 import game.Input.KeyInput;
 import game.Input.MouseInput;
-
+import game.MazeGenerator.Maze;
+import game.Display.Display;
 
 public class Game implements Runnable {
 
     private Thread thread;
-    private JFrame frame;
-    private Canvas canvas;
 
-     
+    private Display display;
+    
     private int width, height;
     public String title;
 
@@ -26,31 +22,30 @@ public class Game implements Runnable {
 
     private boolean running = false;
 
-    public MouseInput mouseIn;
-    public KeyInput keyIn;
+    private MouseInput mouseIn;
+    private KeyInput keyIn;
+
+    private Maze maze;
 
     public Game(String title, int width, int height) {
         this.title = title;
         this.width = width;
         this.height = height;
+
+        mouseIn = new MouseInput();
+        keyIn = new KeyInput();
     }
 
     public void init() {
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setSize(width, height);
-        frame.setVisible(true);
-        canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(width, height));
-        canvas.setMaximumSize(new Dimension(width, height));
-        canvas.setMinimumSize(new Dimension(width, height));
-        canvas.setFocusable(false);
-
-        canvas.addMouseListener(mouseIn);
-        canvas.addKeyListener(keyIn);
-        frame.add(canvas);
-        frame.pack();
+        display = new Display("maze", width, height);
+        
+        display.getFrame().addKeyListener(keyIn);
+        display.getFrame().addMouseListener(mouseIn);
+        display.getFrame().addMouseMotionListener(mouseIn);
+        display.getCanvas().addMouseListener(mouseIn);
+        display.getCanvas().addMouseMotionListener(mouseIn);
+        
+        maze = new Maze();
     }
 
     public void run() {
@@ -71,12 +66,12 @@ public class Game implements Runnable {
                 updates++;
                 delta--;
             }
-            render();
+            render(g);
             frames++;
 
             if(System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                frame.setTitle("Maze Program | ups: " + updates + " | fps: " + frames);
+                display.getFrame().setTitle("Maze Program | ups: " + updates + " | fps: " + frames);
                 updates = 0;
                 frames = 0;
             }
@@ -104,21 +99,32 @@ public class Game implements Runnable {
 
     }
 
-    public void render() {
-        bs = canvas.getBufferStrategy();
+    public void render(Graphics g) {
+        bs = display.getCanvas().getBufferStrategy();
         if(bs == null) {
-            canvas.createBufferStrategy(3);
+            display.getCanvas().createBufferStrategy(3);
             return;
         }
         g = bs.getDrawGraphics();
-
+       
         g.clearRect(0, 0, width, height);
 
+        //g.setColor(new Color(50, 50, 50));
+        //g.setFont(new Font("Sans-Serif", 16, 16));
+        //g.drawString((String)("mouseX: " + mouseIn.mouseX + " mouseY: " + mouseIn.mouseY), 50, 50);
+
+        maze.render(g);
+        
         bs.show();
         g.dispose();
     }
 
-    public JFrame getFrame() {
-        return frame;
+    public KeyInput getKeyInput() {
+        return keyIn;
     }
+
+    public MouseInput getMouseInput() {
+        return mouseIn;
+    }
+
 }
