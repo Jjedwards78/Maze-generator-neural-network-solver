@@ -21,7 +21,7 @@ public class Maze {
     }
 
     public void backTracking() {
-        int numTiles = (tile.length * tile[tile.length].length);
+        numTiles = (tile.length * tile[tile.length].length);
         //14
         for(int x = 0; x < 7; x++) {
             for(int y = 0; y < 7; y++) {
@@ -85,8 +85,13 @@ public class Maze {
     public void render(Graphics g) {
 
         g.setColor(new Color(00, 00, 00));
-        g.drawRect(50, 50, 100, 100);
-        
+        g.drawRect(15, 15, 500, 500);
+
+        for(int x = 0; x < tile.length; x++) {
+            for(int y = 0; y < tile[tile.length].length; y++) {
+
+            }
+        }
     }
 
 }
